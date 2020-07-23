@@ -89,7 +89,7 @@ class modModSport extends DolibarrModules
 			// Set this to 1 if module has its own barcode directory (core/modules/barcode)
 			'barcode' => 0,
 			// Set this to 1 if module has its own models directory (core/modules/xxx)
-			'models' => 0,
+			'models' => 1,
 			// Set this to 1 if module has its own theme directory (theme)
 			'theme' => 0,
 			// Set this to relative path of css file if module has its own css file
@@ -220,8 +220,8 @@ class modModSport extends DolibarrModules
 			//  0 => array(
 			//      'label' => 'MyJob label',
 			//      'jobtype' => 'method',
-			//      'class' => '/modsport/class/myobject.class.php',
-			//      'objectname' => 'MyObject',
+			//      'class' => '/modsport/class/sportactivities.class.php',
+			//      'objectname' => 'SportActivities',
 			//      'method' => 'doScheduledJob',
 			//      'parameters' => '',
 			//      'comment' => 'Comment',
@@ -244,17 +244,17 @@ class modModSport extends DolibarrModules
 		/* BEGIN MODULEBUILDER PERMISSIONS */
 		$this->rights[$r][0] = $this->numero . $r; // Permission id (must not be already used)
 		$this->rights[$r][1] = 'Read objects of ModSport'; // Permission label
-		$this->rights[$r][4] = 'myobject'; // In php code, permission will be checked by test if ($user->rights->modsport->level1->level2)
+		$this->rights[$r][4] = 'sportactivities'; // In php code, permission will be checked by test if ($user->rights->modsport->level1->level2)
 		$this->rights[$r][5] = 'read'; // In php code, permission will be checked by test if ($user->rights->modsport->level1->level2)
 		$r++;
 		$this->rights[$r][0] = $this->numero . $r; // Permission id (must not be already used)
 		$this->rights[$r][1] = 'Create/Update objects of ModSport'; // Permission label
-		$this->rights[$r][4] = 'myobject'; // In php code, permission will be checked by test if ($user->rights->modsport->level1->level2)
+		$this->rights[$r][4] = 'sportactivities'; // In php code, permission will be checked by test if ($user->rights->modsport->level1->level2)
 		$this->rights[$r][5] = 'write'; // In php code, permission will be checked by test if ($user->rights->modsport->level1->level2)
 		$r++;
 		$this->rights[$r][0] = $this->numero . $r; // Permission id (must not be already used)
 		$this->rights[$r][1] = 'Delete objects of ModSport'; // Permission label
-		$this->rights[$r][4] = 'myobject'; // In php code, permission will be checked by test if ($user->rights->modsport->level1->level2)
+		$this->rights[$r][4] = 'sportactivities'; // In php code, permission will be checked by test if ($user->rights->modsport->level1->level2)
 		$this->rights[$r][5] = 'delete'; // In php code, permission will be checked by test if ($user->rights->modsport->level1->level2)
 		$r++;
 		/* END MODULEBUILDER PERMISSIONS */
@@ -270,110 +270,182 @@ class modModSport extends DolibarrModules
 			'titre'=>$langs->trans('ModuleModSportName'),
 			'mainmenu'=>'modsport',
 			'leftmenu'=>'',
-			'url'=>'/modsport/modsportindex.php',
+			'url'=>'/modsport/sportactivities_list.php',
 			'langs'=>'modsport@modsport', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'position'=>1000 + $r,
 			'enabled'=>'$conf->modsport->enabled', // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled.
-			'perms'=>'1', // Use 'perms'=>'$user->rights->modsport->myobject->read' if you want your menu with a permission rules
+			'perms'=>'1', // Use 'perms'=>'$user->rights->modsport->sportactivities->read' if you want your menu with a permission rules
 			'target'=>'',
 			'user'=>2, // 0=Menu for internal users, 1=external users, 2=both
 		);
 		/* END MODULEBUILDER TOPMENU */
-		/* BEGIN MODULEBUILDER LEFTMENU MYOBJECT */
-		$this->menu[$r++]=array(
-			'fk_menu'=>'fk_mainmenu=modsport',      // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-			'type'=>'left',                          // This is a Top menu entry
-			'titre'=>$langs->trans('services'),
-			'mainmenu'=>'modsport',
-			'leftmenu'=>'services',
-			'url'=>'/modsport/modsportindex.php',
-			'langs'=>'modsport@modsport',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-			'position'=>1000+$r,
-			'enabled'=>'$conf->modsport->enabled',  // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled.
-			'perms'=>'$user->rights->modsport->myobject->read',			                // Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
-			'target'=>'',
-			'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
-		);
-		$this->menu[$r++]=array(
-			'fk_menu'=>'fk_mainmenu=modsport,fk_leftmenu=services',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-			'type'=>'left',			                // This is a Left menu entry
-			'titre'=>$langs->trans('AddService'),
-			'mainmenu'=>'modsport',
-			'leftmenu'=>'modsport_myobject_list',
-			'url'=>'/modsport/myobject_list.php',
-			'langs'=>'modsport@modsport',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-			'position'=>1000+$r,
-			'enabled'=>'$conf->modsport->enabled',  // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-			'perms'=>'$user->rights->modsport->myobject->read',			                // Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
-			'target'=>'',
-			'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
-		);
-		$this->menu[$r++]=array(
-			'fk_menu'=>'fk_mainmenu=modsport,fk_leftmenu=myobject',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-			'type'=>'left',			                // This is a Left menu entry
-			'titre'=>'New MyObject',
-			'mainmenu'=>'modsport',
-			'leftmenu'=>'modsport_myobject_new',
-			'url'=>'/modsport/myobject_card.php?action=create',
-			'langs'=>'modsport@modsport',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-			'position'=>1000+$r,
-			'enabled'=>'$conf->modsport->enabled',  // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-			'perms'=>'$user->rights->modsport->myobject->write',			                // Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
-			'target'=>'',
-			'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
-		);
-		/* END MODULEBUILDER LEFTMENU MYOBJECT */
+		/* BEGIN MODULEBUILDER LEFTMENU SPORTACTIVITIES */
+//		$this->menu[$r++]=array(
+//			'fk_menu'=>'fk_mainmenu=modsport,fk_leftmenu=services',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+//			'type'=>'left',			                // This is a Left menu entry
+//			'titre'=>$langs->trans('AddService'),
+//			'mainmenu'=>'modsport',
+//			'leftmenu'=>'modsport_sportactivities_list',
+//			'url'=>'/modsport/sportactivities_list.php',
+//			'langs'=>'modsport@modsport',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+//			'position'=>1000+$r,
+//			'enabled'=>'$conf->modsport->enabled',  // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+//			'perms'=>'$user->rights->modsport->sportactivities->read',			                // Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
+//			'target'=>'',
+//			'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
+//		);
+//		$this->menu[$r++]=array(
+//			'fk_menu'=>'fk_mainmenu=modsport,fk_leftmenu=sportactivities',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+//			'type'=>'left',			                // This is a Left menu entry
+//			'titre'=>'New SportActivities',
+//			'mainmenu'=>'modsport',
+//			'leftmenu'=>'modsport_sportactivities_new',
+//			'url'=>'/modsport/sportactivities_card.php?action=create',
+//			'langs'=>'modsport@modsport',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+//			'position'=>1000+$r,
+//			'enabled'=>'$conf->modsport->enabled',  // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+//			'perms'=>'$user->rights->modsport->sportactivities->write',			                // Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
+//			'target'=>'',
+//			'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
+//		);
+		/* */
+
+        $this->menu[$r++]=array(
+            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+            'fk_menu'=>'fk_mainmenu=modsport',
+            // This is a Left menu entry
+            'type'=>'left',
+            'titre'=>'Liste des activités',
+            'mainmenu'=>'modsport',
+            'leftmenu'=>'modsport_sportactivities',
+            'url'=>'/modsport/sportactivities_list.php',
+            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+            'langs'=>'modsport@modsport',
+            'position'=>1100+$r,
+            // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+            'enabled'=>'$conf->modsport->enabled',
+            // Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
+            'perms'=>'1',
+            'target'=>'',
+            // 0=Menu for internal users, 1=external users, 2=both
+            'user'=>2,
+        );
+        $this->menu[$r++]=array(
+            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+            'fk_menu'=>'fk_mainmenu=modsport,fk_leftmenu=modsport_sportactivities',
+            // This is a Left menu entry
+            'type'=>'left',
+            'titre'=>'Réserver une séance',
+            'mainmenu'=>'modsport',
+            'leftmenu'=>'modsport_sportactivities',
+            'url'=>'/modsport/sportactivities_card.php?action=create',
+            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+            'langs'=>'modsport@modsport',
+            'position'=>1100+$r,
+            // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+            'enabled'=>'$conf->modsport->enabled',
+            // Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
+            'perms'=>'1',
+            'target'=>'',
+            // 0=Menu for internal users, 1=external users, 2=both
+            'user'=>2
+        );
+
+		/* */
+
+//        $this->menu[$r++]=array(
+//            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+//            'fk_menu'=>'fk_mainmenu=modsport',
+//            // This is a Left menu entry
+//            'type'=>'left',
+//            'titre'=>'List SportActivities',
+//            'mainmenu'=>'modsport',
+//            'leftmenu'=>'modsport_sportactivities',
+//            'url'=>'/modsport/sportactivities_list.php',
+//            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+//            'langs'=>'modsport@modsport',
+//            'position'=>1100+$r,
+//            // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+//            'enabled'=>'$conf->modsport->enabled',
+//            // Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
+//            'perms'=>'1',
+//            'target'=>'',
+//            // 0=Menu for internal users, 1=external users, 2=both
+//            'user'=>2,
+//        );
+//        $this->menu[$r++]=array(
+//            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+//            'fk_menu'=>'fk_mainmenu=modsport,fk_leftmenu=modsport_sportactivities',
+//            // This is a Left menu entry
+//            'type'=>'left',
+//            'titre'=>'New SportActivities',
+//            'mainmenu'=>'modsport',
+//            'leftmenu'=>'modsport_sportactivities',
+//            'url'=>'/modsport/sportactivities_card.php?action=create',
+//            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+//            'langs'=>'modsport@modsport',
+//            'position'=>1100+$r,
+//            // Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+//            'enabled'=>'$conf->modsport->enabled',
+//            // Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
+//            'perms'=>'1',
+//            'target'=>'',
+//            // 0=Menu for internal users, 1=external users, 2=both
+//            'user'=>2
+//        );
+
+		/* END MODULEBUILDER LEFTMENU SPORTACTIVITIES */
 
 		// Exports profiles provided by this module
 		$r = 1;
-		/* BEGIN MODULEBUILDER EXPORT MYOBJECT */
+		/* BEGIN MODULEBUILDER EXPORT SPORTACTIVITIES */
 		/*
 		$langs->load("modsport@modsport");
 		$this->export_code[$r]=$this->rights_class.'_'.$r;
-		$this->export_label[$r]='MyObjectLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
-		$this->export_icon[$r]='myobject@modsport';
+		$this->export_label[$r]='SportActivitiesLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
+		$this->export_icon[$r]='sportactivities@modsport';
 		// Define $this->export_fields_array, $this->export_TypeFields_array and $this->export_entities_array
-		$keyforclass = 'MyObject'; $keyforclassfile='/modsport/class/myobject.class.php'; $keyforelement='myobject@modsport';
+		$keyforclass = 'SportActivities'; $keyforclassfile='/modsport/class/sportactivities.class.php'; $keyforelement='sportactivities@modsport';
 		include DOL_DOCUMENT_ROOT.'/core/commonfieldsinexport.inc.php';
 		//$this->export_fields_array[$r]['t.fieldtoadd']='FieldToAdd'; $this->export_TypeFields_array[$r]['t.fieldtoadd']='Text';
 		//unset($this->export_fields_array[$r]['t.fieldtoremove']);
-		//$keyforclass = 'MyObjectLine'; $keyforclassfile='/modsport/class/myobject.class.php'; $keyforelement='myobjectline@modsport'; $keyforalias='tl';
+		//$keyforclass = 'SportActivitiesLine'; $keyforclassfile='/modsport/class/sportactivities.class.php'; $keyforelement='sportactivitiesline@modsport'; $keyforalias='tl';
 		//include DOL_DOCUMENT_ROOT.'/core/commonfieldsinexport.inc.php';
-		$keyforselect='myobject'; $keyforaliasextra='extra'; $keyforelement='myobject@modsport';
+		$keyforselect='sportactivities'; $keyforaliasextra='extra'; $keyforelement='sportactivities@modsport';
 		include DOL_DOCUMENT_ROOT.'/core/extrafieldsinexport.inc.php';
-		//$keyforselect='myobjectline'; $keyforaliasextra='extraline'; $keyforelement='myobjectline@modsport';
+		//$keyforselect='sportactivitiesline'; $keyforaliasextra='extraline'; $keyforelement='sportactivitiesline@modsport';
 		//include DOL_DOCUMENT_ROOT.'/core/extrafieldsinexport.inc.php';
-		//$this->export_dependencies_array[$r] = array('myobjectline'=>array('tl.rowid','tl.ref')); // To force to activate one or several fields if we select some fields that need same (like to select a unique key if we ask a field of a child to avoid the DISTINCT to discard them, or for computed field than need several other fields)
+		//$this->export_dependencies_array[$r] = array('sportactivitiesline'=>array('tl.rowid','tl.ref')); // To force to activate one or several fields if we select some fields that need same (like to select a unique key if we ask a field of a child to avoid the DISTINCT to discard them, or for computed field than need several other fields)
 		//$this->export_special_array[$r] = array('t.field'=>'...');
 		//$this->export_examplevalues_array[$r] = array('t.field'=>'Example');
 		//$this->export_help_array[$r] = array('t.field'=>'FieldDescHelp');
 		$this->export_sql_start[$r]='SELECT DISTINCT ';
-		$this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'myobject as t';
-		//$this->export_sql_end[$r]  =' LEFT JOIN '.MAIN_DB_PREFIX.'myobject_line as tl ON tl.fk_myobject = t.rowid';
+		$this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'sportactivities as t';
+		//$this->export_sql_end[$r]  =' LEFT JOIN '.MAIN_DB_PREFIX.'sportactivities_line as tl ON tl.fk_sportactivities = t.rowid';
 		$this->export_sql_end[$r] .=' WHERE 1 = 1';
-		$this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('myobject').')';
+		$this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('sportactivities').')';
 		$r++; */
-		/* END MODULEBUILDER EXPORT MYOBJECT */
+		/* END MODULEBUILDER EXPORT SPORTACTIVITIES */
 
 		// Imports profiles provided by this module
 		$r = 1;
-		/* BEGIN MODULEBUILDER IMPORT MYOBJECT */
+		/* BEGIN MODULEBUILDER IMPORT SPORTACTIVITIES */
 		/*
 		 $langs->load("modsport@modsport");
 		 $this->export_code[$r]=$this->rights_class.'_'.$r;
-		 $this->export_label[$r]='MyObjectLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
-		 $this->export_icon[$r]='myobject@modsport';
-		 $keyforclass = 'MyObject'; $keyforclassfile='/modsport/class/myobject.class.php'; $keyforelement='myobject@modsport';
+		 $this->export_label[$r]='SportActivitiesLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
+		 $this->export_icon[$r]='sportactivities@modsport';
+		 $keyforclass = 'SportActivities'; $keyforclassfile='/modsport/class/sportactivities.class.php'; $keyforelement='sportactivities@modsport';
 		 include DOL_DOCUMENT_ROOT.'/core/commonfieldsinexport.inc.php';
-		 $keyforselect='myobject'; $keyforaliasextra='extra'; $keyforelement='myobject@modsport';
+		 $keyforselect='sportactivities'; $keyforaliasextra='extra'; $keyforelement='sportactivities@modsport';
 		 include DOL_DOCUMENT_ROOT.'/core/extrafieldsinexport.inc.php';
 		 //$this->export_dependencies_array[$r]=array('mysubobject'=>'ts.rowid', 't.myfield'=>array('t.myfield2','t.myfield3')); // To force to activate one or several fields if we select some fields that need same (like to select a unique key if we ask a field of a child to avoid the DISTINCT to discard them, or for computed field than need several other fields)
 		 $this->export_sql_start[$r]='SELECT DISTINCT ';
-		 $this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'myobject as t';
+		 $this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'sportactivities as t';
 		 $this->export_sql_end[$r] .=' WHERE 1 = 1';
-		 $this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('myobject').')';
+		 $this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('sportactivities').')';
 		 $r++; */
-		/* END MODULEBUILDER IMPORT MYOBJECT */
+		/* END MODULEBUILDER IMPORT SPORTACTIVITIES */
 	}
 
 	/**
@@ -408,14 +480,14 @@ class modModSport extends DolibarrModules
 		// Document templates
 		$moduledir = 'modsport';
 		$myTmpObjects = array();
-		$myTmpObjects['MyObject']=array('includerefgeneration'=>0, 'includedocgeneration'=>0);
+		$myTmpObjects['SportActivities']=array('includerefgeneration'=>0, 'includedocgeneration'=>0);
 
 		foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
-			if ($myTmpObjectKey == 'MyObject') continue;
+			if ($myTmpObjectKey == 'SportActivities') continue;
 			if ($myTmpObjectArray['includerefgeneration']) {
-				$src=DOL_DOCUMENT_ROOT.'/install/doctemplates/modsport/template_myobjects.odt';
+				$src=DOL_DOCUMENT_ROOT.'/install/doctemplates/modsport/template_sportactivitiess.odt';
 				$dirodt=DOL_DATA_ROOT.'/doctemplates/modsport';
-				$dest=$dirodt.'/template_myobjects.odt';
+				$dest=$dirodt.'/template_sportactivitiess.odt';
 
 				if (file_exists($src) && ! file_exists($dest))
 				{

@@ -81,7 +81,7 @@ print load_fiche_titre($langs->trans("TitleModule"), '', 'modsport.png@modsport'
 print '<div class="fichecenter"><h2>Voici toutes les activités sportives disponibles dans notre club</h2><div class="fichethirdleft">';
 
 
-/* BEGIN MODULEBUILDER DRAFT MYOBJECT */
+/* BEGIN MODULEBUILDER DRAFT MYOBJECT
 // Draft MyObject
 if (! empty($conf->modsport->enabled) )
 {

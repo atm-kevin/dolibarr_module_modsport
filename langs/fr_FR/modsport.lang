@@ -49,12 +49,12 @@ MyWidget = Mon widget
 MyWidgetDescription = Description de mon widget
 
 #
-# left menu
+# Landing Page title
 #
-services = Activités
-AddService = Créer une activité sportive
+ActivityList = Liste des activités sportives disponibles
+SportActivities=activité sportive
 
 #
-# Page d'accueil du module
+# Card
 #
-TitleModule = Activités sportives
+qty=Quantité
