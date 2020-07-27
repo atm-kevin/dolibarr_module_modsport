@@ -58,3 +58,6 @@ SportActivities=activité sportive
 # Card
 #
 qty=Quantité
+DatePlanification = Date de début
+DateFin = Date de fin
+

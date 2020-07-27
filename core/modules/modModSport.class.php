@@ -73,7 +73,7 @@ class modModSport extends DolibarrModules
 		// Name of image file used for this module.
 		// If file is in theme/yourtheme/img directory under name object_pictovalue.png, use this->picto='pictovalue'
 		// If file is in module/img directory under name object_pictovalue.png, use this->picto='pictovalue@module'
-		$this->picto = 'generic';
+		$this->picto='modsport@modsport';
 		// Define some features supported by module (triggers, login, substitutions, menus, css, etc...)
 		$this->module_parts = array(
 			// Set this to 1 if module has its own trigger directory (core/triggers)
@@ -315,7 +315,7 @@ class modModSport extends DolibarrModules
             'fk_menu'=>'fk_mainmenu=modsport',
             // This is a Left menu entry
             'type'=>'left',
-            'titre'=>'Liste des activités',
+            'titre'=>'Activités sportives',
             'mainmenu'=>'modsport',
             'leftmenu'=>'modsport_sportactivities',
             'url'=>'/modsport/sportactivities_list.php',
@@ -335,9 +335,9 @@ class modModSport extends DolibarrModules
             'fk_menu'=>'fk_mainmenu=modsport,fk_leftmenu=modsport_sportactivities',
             // This is a Left menu entry
             'type'=>'left',
-            'titre'=>'Réserver une séance',
+            'titre'=>'Créer une activité',
             'mainmenu'=>'modsport',
-            'leftmenu'=>'modsport_sportactivities',
+            'leftmenu'=>'modsport_create',
             'url'=>'/modsport/sportactivities_card.php?action=create',
             // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
             'langs'=>'modsport@modsport',
@@ -350,6 +350,26 @@ class modModSport extends DolibarrModules
             // 0=Menu for internal users, 1=external users, 2=both
             'user'=>2
         );
+		$this->menu[$r++]=array(
+			// '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+			'fk_menu'=>'fk_mainmenu=modsport,fk_leftmenu=modsport_sportactivities',
+			// This is a Left menu entry
+			'type'=>'left',
+			'titre'=>'Liste',
+			'mainmenu'=>'modsport',
+			'leftmenu'=>'modsport_listing',
+			'url'=>'/modsport/sportactivities_list.php',
+			// Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+			'langs'=>'modsport@modsport',
+			'position'=>1100+$r,
+			// Define condition to show or hide menu entry. Use '$conf->modsport->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+			'enabled'=>'$conf->modsport->enabled',
+			// Use 'perms'=>'$user->rights->modsport->level1->level2' if you want your menu with a permission rules
+			'perms'=>'1',
+			'target'=>'',
+			// 0=Menu for internal users, 1=external users, 2=both
+			'user'=>2
+		);
 
 		/* */
 
