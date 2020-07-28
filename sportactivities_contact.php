@@ -48,8 +48,7 @@ $object = new SportActivities($db);
 /*
  * Ajout d'un nouveau contact
  */
-
-if ($action == 'addcontact' && $user->rights->commande->creer)
+if ($action == 'addcontact' && $user->rights->modsport->sportactivities->write)
 {
 	$result = $object->fetch($id);
 
