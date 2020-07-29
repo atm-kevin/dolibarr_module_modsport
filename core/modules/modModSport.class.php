@@ -28,6 +28,7 @@
  */
 include_once DOL_DOCUMENT_ROOT.'/core/modules/DolibarrModules.class.php';
 
+
 /**
  *  Description and activation class for module ModSport
  */
@@ -110,6 +111,7 @@ class modModSport extends DolibarrModules
 			),
 			// Set this to 1 if features of module are opened to external users
 			'moduleforexternal' => 0,
+			'contactelement' => "test",
 		);
 		// Data directories to create when module is enabled.
 		// Example: this->dirs = array("/modsport/temp","/modsport/subdir");
