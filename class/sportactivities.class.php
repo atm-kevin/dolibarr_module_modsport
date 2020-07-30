@@ -105,14 +105,14 @@ class SportActivities extends CommonObject
 		'description' => array('type'=>'text', 'label'=>'Description', 'enabled'=>'1', 'position'=>60, 'notnull'=>0, 'visible'=>3,),
 		'note_public' => array('type'=>'html', 'label'=>'NotePublic', 'enabled'=>'1', 'position'=>61, 'notnull'=>0, 'visible'=>0,),
 		'note_private' => array('type'=>'html', 'label'=>'NotePrivate', 'enabled'=>'1', 'position'=>62, 'notnull'=>0, 'visible'=>0,),
-		'date_creation' => array('type'=>'datetime', 'label'=>'DatePlanification', 'enabled'=>'1', 'position'=>500, 'notnull'=>1, 'visible'=>1,),
+		'date_debut' => array('type'=>'datetime', 'label'=>'DatePlanification', 'enabled'=>'1', 'position'=>500, 'notnull'=>1, 'visible'=>1,),
 		'date_fin' => array('type'=>'datetime', 'label'=>'DateFin', 'enabled'=>'1', 'position'=>500, 'notnull'=>1, 'visible'=>1,),
 		'tms' => array('type'=>'timestamp', 'label'=>'DateModification', 'enabled'=>'1', 'position'=>501, 'notnull'=>0, 'visible'=>-2,),
 		'fk_user_creat' => array('type'=>'integer:User:user/class/user.class.php', 'label'=>'UserAuthor', 'enabled'=>'1', 'position'=>510, 'notnull'=>1, 'visible'=>-2, 'foreignkey'=>'user.rowid',),
 		'fk_user_modif' => array('type'=>'integer:User:user/class/user.class.php', 'label'=>'UserModif', 'enabled'=>'1', 'position'=>511, 'notnull'=>-1, 'visible'=>-2,),
 		'import_key' => array('type'=>'varchar(14)', 'label'=>'ImportId', 'enabled'=>'1', 'position'=>1000, 'notnull'=>-1, 'visible'=>-2,),
 		'model_pdf' => array('type'=>'varchar(255)', 'label'=>'Model pdf', 'enabled'=>'1', 'position'=>1010, 'notnull'=>-1, 'visible'=>0,),
-		'status' => array('type'=>'smallint', 'label'=>'Status', 'enabled'=>'1', 'position'=>1000, 'notnull'=>1, 'visible'=>1, 'index'=>1, 'arrayofkeyval'=>array('0'=>'Brouillon', '1'=>'Planifiée', '2'=>'Effectuée', '9'=>'Annul&eacutee'),),
+		'status' => array('type'=>'smallint', 'label'=>'Status', 'enabled'=>'1', 'position'=>1000, 'notnull'=>1, 'visible'=>0, 'index'=>1, 'arrayofkeyval'=>array('0'=>'Brouillon', '1'=>'Planifiée', '2'=>'Effectuée', '9'=>'Annul&eacutee'),),
 	);
 	public $rowid;
 	public $ref;
@@ -125,14 +125,14 @@ class SportActivities extends CommonObject
 	public $description;
 	public $note_public;
 	public $note_private;
-	public $date_creation;
+	public $date_debut;
 	public $date_fin;
 	public $tms;
 	public $fk_user_creat;
 	public $fk_user_modif;
 	public $import_key;
 	public $model_pdf;
-	public $status;
+	public $status = 0;
 	// END MODULEBUILDER PROPERTIES
 
 
@@ -776,6 +776,7 @@ class SportActivities extends CommonObject
 		else $result .= $hookmanager->resPrint;
 
 		return $result;
+
 	}
 
 	/**
