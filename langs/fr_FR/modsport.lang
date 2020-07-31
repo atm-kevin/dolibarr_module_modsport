@@ -61,3 +61,5 @@ qty=Quantité
 DatePlanification = Date de début
 DateFin = Date de fin
 CreateSession = Créer une session
+modSport_doublecheck_delete = Vérification de la suppression
+modSport_CheckConfirmDeleteProduct = D'autres éléments sont associés à ce produit/service. <hr> Êtes-vous sûr de vouloir supprimer ce produit/service ? <br/> Si oui, le produit/service ainsi que tous les éléments associés seront supprimés.
