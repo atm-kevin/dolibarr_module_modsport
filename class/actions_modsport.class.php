@@ -93,6 +93,7 @@ class ActionsModsport
 
 	public function formObjectOptions($parameters, &$object, &$action, $idUser)
 	{
+		// Méthode pour ajouter des lignes/du code à l'intérieur dans l'affichage principal (card...)
 		global $db;
 
 		$form = new Form($db);
@@ -115,6 +116,8 @@ class ActionsModsport
 
 	public function doActions($parameters, &$object, &$action, $hookmanager)
 	{
+		// Méthode appelée avant même l'appel des headers
+
 		global $langs, $conf, $user, $mc;
 		$form = new Form($this->db);
 
@@ -135,17 +138,7 @@ class ActionsModsport
 		}
 
 		if ($action == 'confirm_delete_double') {
-			$sql = 'SELECT rowid FROM ' . MAIN_DB_PREFIX . 'modsport_sportactivities WHERE fk_product = ' . $object->id;
-
-			$resql = $this->db->query($sql);
-			if ($resql) {
-				while ($obj = $this->db->fetch_object($resql)) {
-					$sqldelete = 'DELETE FROM ' . MAIN_DB_PREFIX . 'modsport_sportactivities WHERE rowid = '. $obj->rowid;
-					$this->db->query($sqldelete);
-				}
-			}
 			$action = 'confirm_delete';
-			return 0;
 		}
 	}
 }

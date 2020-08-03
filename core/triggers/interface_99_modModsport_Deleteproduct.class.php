@@ -32,7 +32,7 @@
  * - The name property name must be MyTrigger
  */
 
-require_once DOL_DOCUMENT_ROOT.'/core/triggers/dolibarrtriggers.class.php';
+require_once DOL_DOCUMENT_ROOT . '/core/triggers/dolibarrtriggers.class.php';
 
 
 /**
@@ -88,12 +88,12 @@ class InterfaceDeleteproduct extends DolibarrTriggers
 	 * All functions "runTrigger" are triggered if file
 	 * is inside directory core/triggers
 	 *
-	 * @param string 		$action 	Event action code
-	 * @param CommonObject 	$object 	Object
-	 * @param User 			$user 		Object user
-	 * @param Translate 	$langs 		Object langs
-	 * @param Conf 			$conf 		Object conf
-	 * @return int              		<0 if KO, 0 if no triggered ran, >0 if OK
+	 * @param string       $action Event action code
+	 * @param CommonObject $object Object
+	 * @param User         $user   Object user
+	 * @param Translate    $langs  Object langs
+	 * @param Conf         $conf   Object conf
+	 * @return int                    <0 if KO, 0 if no triggered ran, >0 if OK
 	 */
 	public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
 	{
@@ -137,7 +137,17 @@ class InterfaceDeleteproduct extends DolibarrTriggers
 			// Products
 			//case 'PRODUCT_CREATE':
 			//case 'PRODUCT_MODIFY':
-//			case 'PRODUCT_DELETE':
+			case 'PRODUCT_DELETE':
+				$sql = 'SELECT rowid FROM ' . MAIN_DB_PREFIX . 'modsport_sportactivities WHERE fk_product = ' . $object->id;
+
+				$resql = $this->db->query($sql);
+				if ($resql) {
+					while ($obj = $this->db->fetch_object($resql)) {
+						$sqldelete = 'DELETE FROM ' . MAIN_DB_PREFIX . 'modsport_sportactivities WHERE rowid = ' . $obj->rowid;
+						$this->db->query($sqldelete);
+					}
+				}
+
 			//case 'PRODUCT_PRICE_MODIFY':
 			//case 'PRODUCT_SET_MULTILANGS':
 			//case 'PRODUCT_DEL_MULTILANGS':
@@ -309,7 +319,7 @@ class InterfaceDeleteproduct extends DolibarrTriggers
 			// and more...
 
 			default:
-				dol_syslog("Trigger '".$this->name."' for action '$action' launched by ".__FILE__.". id=".$object->id);
+				dol_syslog("Trigger '" . $this->name . "' for action '$action' launched by " . __FILE__ . ". id=" . $object->id);
 				break;
 		}
 
