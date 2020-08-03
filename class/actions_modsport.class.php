@@ -136,7 +136,6 @@ class ActionsModsport
 				};
 			}
 		}
-
 		if ($action == 'confirm_delete_double') {
 			$action = 'confirm_delete';
 		}
