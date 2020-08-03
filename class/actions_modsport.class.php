@@ -85,10 +85,9 @@ class ActionsModsport
 			if ($action == 'ask_delete_modsportchild') {
 				print $form->formconfirm($_SERVER["PHP_SELF"]
 					. '?id=' . $object->id, $langs->trans('modSport_doublecheck_delete')
-					, $langs->trans('modSport_CheckConfirmDeleteProduct', $object->ref), 'confirm_delete'
+					, $langs->trans('modSport_CheckConfirmDeleteProduct', $object->ref), 'confirm_delete_double'
 					, 'yes', 'action-delete', 350, 300);
 			}
-
 		};
 	}
 
@@ -97,38 +96,56 @@ class ActionsModsport
 		global $db;
 
 		$form = new Form($db);
-		$sql = "SELECT COUNT(*) as c FROM " . MAIN_DB_PREFIX . "modsport_sportactivities WHERE fk_product =" . $object->id;
+		$sql = "SELECT COUNT(*) as c FROM " . MAIN_DB_PREFIX . "modsport_sportactivities WHERE fk_product = " . $object->id;
 		$resql = $this->db->query($sql);
 
-		if ($resql > 0) {
-			$obj = $this->db->fetch_object($resql);
+		if ($resql) {
+			if ($resql > 0) {
+				$obj = $this->db->fetch_object($resql);
 
-			print '<td>';
-			print 'Nombre de sessions liées à ce service';
-			print '</td>';
-			print '<td>';
-			print $obj->c;
-			print '</td>';
-
-		};
+				print '<td>';
+				print 'Nombre de sessions liées à ce service';
+				print '</td>';
+				print '<td>';
+				print $obj->c;
+				print '</td>';
+			};
+		}
 	}
 
 	public function doActions($parameters, &$object, &$action, $hookmanager)
 	{
 		global $langs, $conf, $user, $mc;
-		$form = new Form($db);
+		$form = new Form($this->db);
 
 		if ($action == 'confirm_delete') {
 			$sql = "SELECT COUNT(*) as c FROM " . MAIN_DB_PREFIX . "modsport_sportactivities WHERE fk_product =" . $object->id;
 			$resql = $this->db->query($sql);
-			$obj = $this->db->fetch_object($resql);
 
-			if ($resql > 0) {
-				setEventMessage("Il y a encore " . $obj->c . " session(s) liées à votre produit");
-				$object->fetch($id);
-				header('location: ' . DOL_URL_ROOT . '/product/card.php?id=' . $object->id . '&action=ask_delete_modsportchild');
-				exit;
-			};
+			if ($resql) {
+				if ($resql > 0) {
+					$obj = $this->db->fetch_object($resql);
+					if ($obj->c > 0) {
+						setEventMessage("Il y a encore " . $obj->c . " session(s) liées à votre produit");
+						header('location: ' . DOL_URL_ROOT . '/product/card.php?id=' . $object->id . '&action=ask_delete_modsportchild');
+						exit;
+					}
+				};
+			}
+		}
+
+		if ($action == 'confirm_delete_double') {
+			$sql = 'SELECT rowid FROM ' . MAIN_DB_PREFIX . 'modsport_sportactivities WHERE fk_product = ' . $object->id;
+
+			$resql = $this->db->query($sql);
+			if ($resql) {
+				while ($obj = $this->db->fetch_object($resql)) {
+					$sqldelete = 'DELETE FROM ' . MAIN_DB_PREFIX . 'modsport_sportactivities WHERE rowid = '. $obj->rowid;
+					$this->db->query($sqldelete);
+				}
+			}
+			$action = 'confirm_delete';
+			return 0;
 		}
 	}
 }
